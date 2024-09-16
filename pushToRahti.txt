@@ -1,0 +1,15 @@
+docker build --no-cache -t mainosmestari .
+docker run -p 3000:3000 mainosmestari
+docker run --env-file .env.local -p 3000:3000 mainosmestari  // env tiedoston kanssa.
+
+DockerHub
+docker tag mainosmestari laguagu/alya:latest
+docker push laguagu/alya:latest
+
+Rahti 2 - Rahti Image registry
+docker tag mainosmestari image-registry.apps.2.rahti.csc.fi/alyakokeilut/mainosmestari:latest
+docker login -u g -p $(oc whoami -t) image-registry.apps.2.rahti.csc.fi
+docker push image-registry.apps.2.rahti.csc.fi/alyakokeilut/mainosmestari:latest
+
+-Tarkista imagestream
+oc get imagestream nikari
