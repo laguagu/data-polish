@@ -16,9 +16,9 @@ export const config = {
 
 export function middleware(req: NextRequest) {
   // Skip authentication for public routes if needed
-//   if (req.nextUrl.pathname.startsWith("/public")) {
-//     return NextResponse.next();
-//   }
+  //   if (req.nextUrl.pathname.startsWith("/public")) {
+  //     return NextResponse.next();
+  //   }
 
   const basicAuth = req.headers.get("authorization");
 

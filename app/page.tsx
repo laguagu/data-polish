@@ -1,101 +1,108 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { HeaderTexts } from "@/components/kiertonet/3d/header-texts";
+import ProductChart from "@/components/kiertonet/chart/product-chart";
+import { DownloadButton } from "@/components/kiertonet/download-button";
+import { ProductTable } from "@/components/kiertonet/product-table";
+import { ProductUploader } from "@/components/kiertonet/product-upoloader";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useProductStore } from "@/lib/store/productStore";
+import { Download, FileSpreadsheet, RefreshCw, Zap } from "lucide-react";
+import { useState } from "react";
+
+export default function Page() {
+  const [showPreview, setShowPreview] = useState(false);
+  const { setProducts, products } = useProductStore((state) => ({
+    setProducts: state.setProducts,
+    products: state.products,
+  }));
+
+  const handleAnalysisComplete = () => {
+    setShowPreview(true);
+  };
+
+  const handleStartOver = () => {
+    setShowPreview(false);
+    setProducts([]);
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        <header className="text-center space-y-4 mb-8">
+          <HeaderTexts text="DataPolish" />
+        </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <Card className="border-gray-700 backdrop-blur-sm">
+          <CardContent className="p-6">
+            {/* <ProductChart /> */}
+            {!showPreview ? (
+              <ProductUploader
+                handleAnalysisComplete={handleAnalysisComplete}
+              />
+            ) : (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold">Käsitelty Data</h2>
+                  <Button onClick={handleStartOver} variant="outline" size="sm">
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Aloita alusta
+                  </Button>
+                </div>
+                <ProductTable />
+                <DownloadButton />
+                {/* <ProductChartDialog /> */}
+                <ProductChart />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <section className="grid md:grid-cols-3 gap-6 mt-12">
+          <Card className="bg-gray-800/80 border-gray-700 backdrop-blur-sm hover:bg-gray-800 transition-colors">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4 text-blue-400 mb-4">
+                <FileSpreadsheet className="h-8 w-8" />
+                <h3 className="text-xl font-semibold">Lataa</h3>
+              </div>
+              <p className="text-gray-300">
+                Lataa saumattomasti CSV- tai Excel-tiedostot, jotka sisältävät
+                tuotetiedot tekoälypohjaista parannusta varten.
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="bg-gray-800/80 border-gray-700 backdrop-blur-sm hover:bg-gray-800 transition-colors">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4 text-green-400 mb-4">
+                <Zap className="h-8 w-8" />
+                <h3 className="text-xl font-semibold">Paranna</h3>
+              </div>
+              <p className="text-gray-300">
+                Kehittyneet tekoälyalgoritmimme parantavat ja rikastavat
+                tuotetietojasi automaattisesti parhaiden tulosten
+                saavuttamiseksi.
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="bg-gray-800/80 border-gray-700 backdrop-blur-sm hover:bg-gray-800 transition-colors">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4 text-purple-400 mb-4">
+                <Download className="h-8 w-8" />
+                <h3 className="text-xl font-semibold">Lataa</h3>
+              </div>
+              <p className="text-gray-300">
+                Lataa parannettu data välittömästi, valmis saumattomaan
+                integrointiin tuoteluetteloihisi.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        <footer className="text-center text-gray-400 mt-12">
+          <p>&copy; 2024 DataPolish</p>
+        </footer>
+      </div>
     </div>
   );
 }

@@ -61,8 +61,6 @@ async function generateProductMetadata(product: z.infer<typeof ProductSchema>) {
 // }
 
 export async function refactorProduct(product: any, schema?: z.ZodSchema) {
-  console.log("Saatu tieto", product);
-
   const usedSchema = schema || refactoredProductSchema;
 
   const result = await generateObject({

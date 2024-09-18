@@ -58,7 +58,7 @@ export function ProductUploader({ handleAnalysisComplete }: props) {
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState<any[]>([]);
   const [newColumn, setNewColumn] = useState({ name: "", type: "string" });
-  const [activeTab, setActiveTab] = useState("new");
+  const [activeTab, setActiveTab] = useState("current");
   const [abortController, setAbortController] =
     useState<AbortController | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -296,10 +296,9 @@ export function ProductUploader({ handleAnalysisComplete }: props) {
           <TabsTrigger value="new">Mukautettu malli</TabsTrigger>
         </TabsList>
       </div>
-      <div className="text-center mt-4 text-gray-600 leading-relaxed ">
-        Vakiomallilla voit ladata valmiiksi määritellyn tiedoston, joka sisältää
-        tuotetiedot. Mukautetulla mallilla voit ladata oman tiedoston ja
-        määritellä sarakkeet itse.
+      <div className="text-center mt-4 text-gray-600 leading-relaxed">
+        Vakiomalli on valmiin tuotetietomallin mukaan luotu tiedosto.
+        Mukautetulla mallilla voit määritellä sarakkeet itse.
       </div>
       <TabsContent value="current">
         <DndProvider backend={HTML5Backend}>
@@ -408,6 +407,10 @@ export function ProductUploader({ handleAnalysisComplete }: props) {
               )}
               {data.length > 0 && (
                 <>
+                  <p className="text-gray-600">
+                    Lisää tai poista tiedoston otsikkotekstejä, joiden
+                    perusteella tekoäly luo sinulle uuden tiedoston
+                  </p>
                   <div className="flex items-center space-x-2">
                     <Input
                       type="text"
