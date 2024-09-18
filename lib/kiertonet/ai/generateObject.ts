@@ -62,6 +62,14 @@ async function generateProductMetadata(product: z.infer<typeof ProductSchema>) {
 
 export async function refactorProduct(product: any, schema?: z.ZodSchema) {
   const usedSchema = schema || refactoredProductSchema;
+  console.log("product", product);
+
+  // Tulostetaan skeeman kentät
+  const schemaFields = (usedSchema as z.ZodObject<any>).shape;
+  console.log("Schema fields:");
+  Object.keys(schemaFields).forEach((field) => {
+    console.log(`- ${field}`);
+  });
 
   const result = await generateObject({
     model: openai("gpt-4o-mini", {
